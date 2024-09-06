@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 import pandas as pd
 
+
 def run(playwright):
     browser = playwright.chromium.launch(headless=True)  # Запуск браузера в фоновом режиме
     page = browser.new_page()  # Открыть новую страницу
@@ -20,16 +21,26 @@ def run(playwright):
         details_link = release.query_selector('.release-enhancements > a').get_attribute('href')
 
         data.append({
-            'version': version,
-            'release_date': date,
-            'download_link': "https://www.python.org" + download_link,
-            'details_link': details_link
+            'Release version': version,
+            'Release date': date,
+            'Download': "https://www.python.org" + download_link,
+            'Release Notes': details_link
         })
 
     browser.close()  # Закрыть браузер
+    try:
+        df = pd.DataFrame.from_dict(data)
+        df.to_excel('version_python.xlsx')
+        print("Формирование файло завершено. Завершение программы")
+    except Exception as e:
+        print(f"Произошла ошибка при формировании итогового файла. Ошибка: {e}. \nЗавершение программы.")
 
-    df = pd.DataFrame.from_dict(data)
-    df.to_excel('version_python.xlsx')
 
-with sync_playwright() as playwright:
-    run(playwright)
+def main():
+    with sync_playwright() as playwright:
+        run(playwright)
+
+
+if __name__ == "__main__":
+    print("Старт выполнения")
+    main()
