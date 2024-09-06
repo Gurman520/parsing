@@ -1,7 +1,7 @@
 from json import load
 
 
-def t(data: list) -> list:
+def recursive_search(data: list) -> list:
     """
     Функция рекурсивного поиска всех компаний собранных в Json файле
     """
@@ -18,9 +18,8 @@ def t(data: list) -> list:
 with open('new_test_hw.json', encoding='utf-8') as file:
     data = load(file)
     print(data)
-    answer = t(data["children"])
+    answer = recursive_search(data["children"])
     print(answer)
     print(len(answer))
     print(type(answer))
     print(type(answer[0]))
-
